@@ -1,0 +1,6 @@
+images {
+  image: "/screenshooter/assets/images/camera.png"
+}
+margin: 0
+extrude_borders: 1
+inner_padding: 0

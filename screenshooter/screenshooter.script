@@ -1,0 +1,9 @@
+go.property("enabled", true)
+
+function init(self)
+	if not self.enabled then
+		msg.post("#gui", "disable")
+	else
+		msg.post("#gui", "enable")
+	end
+end

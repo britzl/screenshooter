@@ -1,0 +1,36 @@
+image: "/example/assets/images/backgrounds.png"
+tile_width: 231
+tile_height: 63
+tile_margin: 0
+tile_spacing: 0
+collision: ""
+material_tag: "tile"
+animations {
+  id: "hills"
+  start_tile: 1
+  end_tile: 1
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "mushrooms"
+  start_tile: 2
+  end_tile: 2
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "rock"
+  start_tile: 3
+  end_tile: 3
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+extrude_borders: 1
+inner_padding: 0

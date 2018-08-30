@@ -1,0 +1,72 @@
+-- https://blog.placeit.net/ios-screenshot-sizes/
+-- https://help.apple.com/app-store-connect/#/dev910472ff2
+local IOS = {
+	ipad_12_9 =	{ w = 2048, h = 2732 },
+	ipad_10_5 =	{ w = 1668, h = 2224 },
+	ipad_9_7 =	{ w = 1536, h = 2048 },
+
+	iphone_5_8 = { w = 1125, h = 2436 },
+	iphone_5_5 = { w = 1242, h = 2208 },
+	iphone_4_7 = { w = 750, h = 1334 },
+	iphone_4 =	{ w = 640, h = 1136 },
+}
+
+function init(self)
+	self.camera = gui.get_node("camera")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("enable") then
+		msg.post(".", "acquire_input_focus")
+	elseif message_id == hash("disable") then
+		msg.post(".", "release_input_focus")
+	end
+end
+
+local function delay(duration)
+	local co = coroutine.running()
+	timer.delay(duration, false, function()
+		coroutine.resume(co)
+	end)
+	coroutine.yield()
+end
+
+local function capture(self, sizes)
+	coroutine.wrap(function()
+		local x,y,w,h = defos.get_view_size()
+		for k,size in pairs(sizes) do
+			defos.set_window_title(("%s %dx%d"):format(k, size.w, size.h))
+			defos.set_view_size(nil, nil, size.w, size.h)
+			delay(0.5)
+			local png = screenshot.png()
+			local file = io.open(k .. ".png", "wb")
+			file:write(png)
+			file:flush()
+			file:close()
+		end
+		defos.set_view_size(nil, nil, w, h)
+		defos.set_window_title("DONE!")
+	end)()
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.released and gui.pick_node(self.camera, action.x, action.y)then
+		mnu.begin()
+		mnu.label(1, true, "iOS")
+		mnu.label(2, true, "Android")
+		mnu.finish()
+		local _, _, _, h = defos.get_view_size()
+		local result = mnu.show(action.screen_x, h - action.screen_y)
+		print(result)
+		if result == 1 then
+			capture(self, IOS)
+		elseif result == 2 then
+			capture(self, ANDROID)
+		end
+	end
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
